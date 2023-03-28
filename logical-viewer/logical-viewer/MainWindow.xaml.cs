@@ -74,6 +74,10 @@ namespace LogicalViewer
                 };
 
                 LogsTabView.TabItems.Add(newItem);
+                if (LogsTabView.TabItems.Count == 1)
+                {
+                    LogsTabView.SelectedIndex = 0;
+                }
             }
         }
 
