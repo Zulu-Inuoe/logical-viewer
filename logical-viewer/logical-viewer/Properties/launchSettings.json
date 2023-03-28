@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "logical-viewer (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "logical-viewer (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
