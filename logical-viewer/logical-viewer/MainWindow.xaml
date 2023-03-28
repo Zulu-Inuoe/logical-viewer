@@ -10,8 +10,12 @@
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   mc:Ignorable="d">
 
-  <StackPanel Orientation="Vertical">
-    <MenuBar>
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="*" />
+    </Grid.RowDefinitions>
+    <MenuBar Grid.Row="0">
       <MenuBarItem Title="File">
         <MenuFlyoutItem Text="Open..." Click="MenuBarOpen_Click" />
         <MenuFlyoutItem Text="Close"/>
@@ -22,7 +26,7 @@
       </MenuBarItem>
     </MenuBar>
 
-    <TabView x:Name="LogsTabView" TabCloseRequested="TabView_TabCloseRequested" IsAddTabButtonVisible="False">
+    <TabView x:Name="LogsTabView" Grid.Row="1" TabCloseRequested="TabView_TabCloseRequested" IsAddTabButtonVisible="False">
       <TabView.KeyboardAccelerators>
         <KeyboardAccelerator Key="F4" Modifiers="Control" Invoked="CloseSelectedTabKeyboardAccelerator_Invoked" />
         <KeyboardAccelerator Key="Number1" Modifiers="Control" Invoked="NavigateToNumberedTabKeyboardAccelerator_Invoked" />
@@ -37,5 +41,5 @@
         <KeyboardAccelerator Key="Number0" Modifiers="Control" Invoked="NavigateToNumberedTabKeyboardAccelerator_Invoked" />
       </TabView.KeyboardAccelerators>
     </TabView>
-  </StackPanel>
+  </Grid>
 </Window>

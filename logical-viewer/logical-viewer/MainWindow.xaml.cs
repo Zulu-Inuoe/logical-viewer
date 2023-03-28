@@ -62,7 +62,6 @@ namespace LogicalViewer
                     UserLog = userLog
                 };
 
-
                 var newItem = new TabViewItem
                 {
                     Header = file.DisplayName,
