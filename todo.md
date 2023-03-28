@@ -1,7 +1,7 @@
 MVP
 
-- [ ] Open .log file
-    - [ ] Parser
+- [x] Open .log file
+    - [x] Parser
     - [ ] View
 - [ ] Open .zip file
     - [ ] Decompress & parse
@@ -9,14 +9,17 @@ MVP
 - [ ] Drag and drop file to open
 - [ ] Overview of sync status
     - [ ] Accounts
-        - [ ] Parser
+        - [x] Parser
         - [ ] View
     - [ ] Calendars
-        - [ ] Parser
+        - [x] Parser
         - [ ] View
     - [ ] Sync queues
         - [ ] Parser
         - [ ] View
             - [ ] Pretty print last sync
     - [ ] Calendar Set
+        - [x] Parser
+        - [ ] View
+
 
