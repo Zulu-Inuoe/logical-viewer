@@ -28,7 +28,6 @@ namespace LogicalParse
             var ret = new UserLog();
 
             var parseState = ParseState.None;
-            var calendarSet = default(UserCalendarSet);
             for (var line = reader.ReadLine(); line != null;)
             {
                 if (line.Contains(" Accounts:"))
