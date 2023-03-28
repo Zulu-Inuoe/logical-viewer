@@ -1,4 +1,4 @@
-using LogicalParse.DataModel;
+﻿using LogicalParse.DataModel;
 using System.Text.RegularExpressions;
 
 namespace LogicalParse
@@ -40,10 +40,17 @@ namespace LogicalParse
                     parseState = ParseState.Calendars;
                     line = reader.ReadLine();
                 }
-                else if (line.Contains(" Current calendar set: "))
-                {// TODO
+                else if (sc_CurrentCalendarSetRegex.IsMatch(line))
+                {// TODO matching twice
                     parseState = ParseState.CalendarSet;
-                    calendarSet = new UserCalendarSet();
+
+                    var match = sc_CurrentCalendarSetRegex.Match(line);
+                    ret.CurrentCalendarSet = new()
+                    {
+                        Name = match.Groups[1].Value,
+                        ID = match.Groups[2].Value
+                    };
+
                     line = reader.ReadLine();
                 }
                 else if (line.Contains(" Sync queues: "))
@@ -108,6 +115,20 @@ namespace LogicalParse
                             line = reader.ReadLine();
                             continue;
                         }
+                    case ParseState.CalendarSet:
+                        {
+                            var match = sc_CalendarSetRegex.Match(line);
+                            if (!match.Success)
+                                break;
+
+                            ret.CurrentCalendarSet.Entries.Add(new()
+                            {
+                                Name = match.Groups[1].Value,
+                                ID = match.Groups[2].Value
+                            });
+                            line = reader.ReadLine();
+                            continue;
+                        }
                     case ParseState.None:
                     default:
                         {
@@ -133,5 +154,7 @@ namespace LogicalParse
         }
 
         private static readonly Regex sc_CalendarRegex = new Regex(@"^.* \t(.+), (.+), (.+), (0|1)\/(0|1) \(count: (\d+)\)");
+        private static readonly Regex sc_CurrentCalendarSetRegex = new Regex(@"^.* Current calendar set: (.+), (.+)");
+        private static readonly Regex sc_CalendarSetRegex = new Regex(@"^.* \t(.+), (.+)\s*$");
     }
 }
