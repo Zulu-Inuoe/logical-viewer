@@ -15,7 +15,7 @@ MVP
         - [x] Parser
         - [ ] View
     - [ ] Sync queues
-        - [ ] Parser
+        - [x] Parser
         - [ ] View
             - [ ] Pretty print last sync
     - [ ] Calendar Set

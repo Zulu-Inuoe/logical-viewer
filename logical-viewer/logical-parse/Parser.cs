@@ -1,4 +1,5 @@
 ﻿using LogicalParse.DataModel;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace LogicalParse
@@ -129,6 +130,48 @@ namespace LogicalParse
                             line = reader.ReadLine();
                             continue;
                         }
+                    case ParseState.SyncQueues:
+                        {
+                            // this one's trickier because it crosses lines, so let's accumulate input until we see a bare )> indicating the end of the plist
+                            // First let's see if this is even a candidate by checking the first line
+                            if (!sc_SyncQueueStartLineRegex.IsMatch(line))
+                                break;
+
+                            // Now that we know we have a candidate line, continue eating up lines until blank line
+                            var sb = new StringBuilder(line);
+                            while (!string.IsNullOrWhiteSpace(line = reader.ReadLine()))
+                            {
+                                sb.AppendLine(line);
+                            }
+
+                            if (line is null)
+                            {// we got incomplete input, just bail
+                                break;
+                            }
+
+                            var buffer = sb.ToString();
+
+                            var match = sc_SyncQueueRegex.Match(buffer);
+                            if (!match.Success)
+                                break;
+
+                            var lastSyncStr = match.Groups[4].Value;
+                            if (!DateTime.TryParse(lastSyncStr, out var lastSync))
+                                break;
+
+                            ret.UserSyncQueues.Add(new()
+                            {
+                                SourceID = match.Groups[1].Value,
+                                SourceKind = match.Groups[2].Value,
+                                SourceUser = match.Groups[3].Value,
+                                LastSync = lastSync,
+                                QueueKind = match.Groups[5].Value,
+                                Active = match.Groups[6].Value == "1"
+                            });
+
+                            line = reader.ReadLine();
+                            continue;
+                        }
                     case ParseState.None:
                     default:
                         {
@@ -156,5 +199,7 @@ namespace LogicalParse
         private static readonly Regex sc_CalendarRegex = new Regex(@"^.* \t(.+), (.+), (.+), (0|1)\/(0|1) \(count: (\d+)\)\s*$");
         private static readonly Regex sc_CurrentCalendarSetRegex = new Regex(@"^.* Current calendar set: (.+), (.+)\s*$");
         private static readonly Regex sc_CalendarSetRegex = new Regex(@"^.* \t(.+), (.+)\s*$");
+        private static readonly Regex sc_SyncQueueStartLineRegex = new Regex(@"(\S+) \/ (\S+) \((\S+), last sync: (.+), (?:.*)\): <(\S+): (?:\S+), active\? (0|1), ");
+        private static readonly Regex sc_SyncQueueRegex = new Regex(@"(\S+) \/ (\S+) \((\S+), last sync: (.+), (?:.*)\): <(\S+): (?:\S+), active\? (0|1), ([\S\s]*)>");
     }
 }
