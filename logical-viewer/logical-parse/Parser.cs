@@ -1,4 +1,5 @@
-﻿using LogicalParse.DataModel;
+using LogicalParse.DataModel;
+using System.Text.RegularExpressions;
 
 namespace LogicalParse
 {
@@ -68,7 +69,7 @@ namespace LogicalParse
                             // Name, ID, enabled|disabled, kind[, user[, provider]]
                             if (split.Length < 4 || 6 < split.Length)
                                 break;
-                            for(var i = 0; i < split.Length; ++i)
+                            for (var i = 0; i < split.Length; ++i)
                             {
                                 split[i] = split[i].Trim();
                             }
@@ -86,6 +87,24 @@ namespace LogicalParse
                                 SourceProvider = split.Length > 5 ? split[5] : null
                             });
 
+                            line = reader.ReadLine();
+                            continue;
+                        }
+                    case ParseState.Calendars:
+                        {
+                            var match = sc_CalendarRegex.Match(line);
+                            if (!match.Success)
+                                break;
+
+                            ret.UserCalendars.Add(new()
+                            {
+                                Name = match.Groups[1].Value,
+                                Source = match.Groups[2].Value,
+                                ID = match.Groups[3].Value,
+                                SyncRx = match.Groups[4].Value == "1",
+                                SyncTx = match.Groups[5].Value == "1",
+                                Count = int.Parse(match.Groups[6].Value)
+                            });
                             line = reader.ReadLine();
                             continue;
                         }
@@ -112,5 +131,7 @@ namespace LogicalParse
             CalendarSet,
             SyncQueues
         }
+
+        private static readonly Regex sc_CalendarRegex = new Regex(@"^.* \t(.+), (.+), (.+), (0|1)\/(0|1) \(count: (\d+)\)");
     }
 }
