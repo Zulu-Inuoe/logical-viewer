@@ -61,6 +61,11 @@ namespace LogicalParse
                 {
                     parseState = ParseState.UnresolvedErrors;
                 }
+                else if (line.Contains(" Verbose sources:"))
+                {
+                    parseState = ParseState.VerboseSources;
+                    line = reader.ReadLine();
+                }
 
                 if (line is null)
                 {
@@ -88,16 +93,70 @@ namespace LogicalParse
                             if (enabledDisabled != "enabled" && enabledDisabled != "disabled")
                                 break;
 
-                            ret.UserAccounts.Add(new()
+                            var providerId = split[1];
+                            var account = ret.UserAccounts.Find(ua => ua.ProviderID == providerId);
+                            if (account == null)
                             {
-                                Name = split[0],
-                                ProviderID = split[1],
-                                Enabled = enabledDisabled == "enabled",
-                                SourceKind = split[3],
-                                SourceUser = split.Length > 4 ? split[4] : null,
-                                SourceProvider = split.Length > 5 ? split[5] : null
-                            });
+                                account = new()
+                                {
+                                    ProviderID = providerId
+                                };
+                                ret.UserAccounts.Add(account);
+                            }
 
+                            account.Name = split[0];
+                            account.Enabled = enabledDisabled == "enabled";
+                            account.SourceKind = split[3];
+                            account.SourceUser = split.Length > 4 ? split[4] : null;
+                            account.SourceProvider = split.Length > 5 ? split[5] : null;
+
+                            line = reader.ReadLine();
+                            continue;
+                        }
+                    case ParseState.VerboseSources:
+                        {
+                            if (!line.TrimEnd().EndsWith("{"))
+                                break;
+
+                            var sb = new StringBuilder("{");
+                            sb.AppendLine();
+                            var identifier = default(string?);
+                            while ((line = reader.ReadLine()) != null)
+                            {
+                                sb.AppendLine(line);
+
+                                if (line.Trim() == "}")
+                                    break;
+                                var match = sc_VerboseSourceIdentifierRegex.Match(line);
+                                if (match.Success)
+                                    identifier = match.Groups[1].Value;
+                            }
+
+                            if (line is null)
+                                break;
+
+                            if (identifier is null)
+                                break;
+
+                            if (identifier.StartsWith('"'))
+                            {// Sometimes the identifier is wrapped in quotes
+                                // bad string
+                                if (!identifier.EndsWith('"'))
+                                    break;
+
+                                identifier = identifier.Substring(1, identifier.Length - 2);
+                            }
+
+                            var account = ret.UserAccounts.Find(ua => ua.ProviderID == identifier);
+                            if (account is null)
+                            {
+                                account = new()
+                                {
+                                    ProviderID = identifier
+                                };
+                            }
+
+                            account.Details = sb.ToString();
                             line = reader.ReadLine();
                             continue;
                         }
@@ -198,7 +257,7 @@ namespace LogicalParse
 
                             ret.NumUnresolvedErrors = numErrors;
                             ret.UnresolvedErrors = buffer;
-                            
+
                             line = reader.ReadLine();
                             parseState = ParseState.None;
                             continue;
@@ -225,6 +284,7 @@ namespace LogicalParse
             Calendars,
             CalendarSet,
             SyncQueues,
+            VerboseSources,
             UnresolvedErrors
         }
 
@@ -234,5 +294,6 @@ namespace LogicalParse
         private static readonly Regex sc_SyncQueueStartLineRegex = new Regex(@"(\S+) \/ (\S+) \((\S+), last sync: (.+), (?:.*)\): <(\S+): (?:\S+), active\? (0|1), ");
         private static readonly Regex sc_SyncQueueRegex = new Regex(@"(\S+) \/ (\S+) \((\S+), last sync: (.+), (?:.*)\): <(\S+): (?:\S+), active\? (0|1), ([\S\s]*)>");
         private static readonly Regex sc_UnresolvedErrorsRegex = new Regex(@".+ Unresolved errors: \((\d+)\)");
+        private static readonly Regex sc_VerboseSourceIdentifierRegex = new Regex(@"\s*identifier\s*=\s*(\S*)\s*;");
     }
 }

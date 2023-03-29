@@ -11,7 +11,6 @@
         // TODO - May be better to split these into subclasses if we can get enumerations of all of the source kinds
         public string? SourceUser { get; set; }
         public string? SourceProvider { get; set; }
-
-        // TODO - Pull additional property list
+        public string? Details { get; set; }
     }
 }

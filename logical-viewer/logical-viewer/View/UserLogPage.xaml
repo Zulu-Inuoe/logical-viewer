@@ -71,8 +71,22 @@
       <TextBlock Grid.Row="0" Margin="0,5">Accounts:</TextBlock>
       <controls:DataGrid Grid.Row="1"
           ItemsSource="{x:Bind ViewModel.UserLog.UserAccounts}"
-          AutoGenerateColumns="True"
-          IsReadOnly="True">
+          AutoGenerateColumns="False"
+          IsReadOnly="True"
+          RowDetailsVisibilityMode="VisibleWhenSelected">
+        <controls:DataGrid.RowDetailsTemplate>
+          <DataTemplate x:DataType="dataModel:UserAccount">
+            <TextBlock Text="{x:Bind Details}" VerticalAlignment="Stretch" />
+          </DataTemplate>
+        </controls:DataGrid.RowDetailsTemplate>
+        <controls:DataGrid.Columns>
+          <controls:DataGridCheckBoxColumn Header="Enabled" Binding="{Binding Enabled}" />
+          <controls:DataGridTextColumn Header="Name" Binding="{Binding Name}" />
+          <controls:DataGridTextColumn Header="ID" Binding="{Binding ProviderID}" />
+          <controls:DataGridTextColumn Header="Type" Binding="{Binding SourceKind}" />
+          <controls:DataGridTextColumn Header="Provider" Binding="{Binding SourceProvider}" />
+          <controls:DataGridTextColumn Header="User" Binding="{Binding SourceUser}" />
+        </controls:DataGrid.Columns>
       </controls:DataGrid>
     </Grid>
 
