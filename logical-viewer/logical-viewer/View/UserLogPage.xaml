@@ -17,20 +17,18 @@
   </Page.Resources>
   <Grid>
     <Grid.RowDefinitions>
-      <RowDefinition Height=".5*" />
+      <RowDefinition Height="Auto" />
       <RowDefinition Height="*" />
       <RowDefinition Height="*" />
       <RowDefinition Height="*" />
     </Grid.RowDefinitions>
 
-    <Grid Grid.Row="0" Margin="5">
-      <Grid.RowDefinitions>
-        <RowDefinition Height="Auto" />
-        <RowDefinition />
-      </Grid.RowDefinitions>
-      <TextBlock Grid.Row="0" Margin="0,5">Overview:</TextBlock>
-      <ScrollViewer Grid.Row="1" Margin="5" VerticalScrollBarVisibility="Visible">
-        <Grid>
+    <Expander Grid.Row="0" Margin="5">
+      <Expander.Header>
+        <TextBlock Grid.Row="0" Margin="0,5">Overview:</TextBlock>
+      </Expander.Header>
+      <Expander.Content>
+        <Grid HorizontalAlignment="Left" Padding="0" Margin="0">
           <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="10" />
@@ -52,11 +50,19 @@
           <TextBlock Grid.Column="0" Grid.Row="2" Text="Sync Queues" />
           <TextBlock Grid.Column="2" Grid.Row="2" Text="{x:Bind ViewModel.UserSyncQueues.Count}" />
           <TextBlock Grid.Column="0" Grid.Row="3" Text="Unresolved Errors" />
-          <TextBlock Grid.Column="2" Grid.Row="3" Text="{x:Bind ViewModel.UserLog.NumUnresolvedErrors}" />
+          <Expander Grid.Column="2" Grid.Row="3"  >
+            <Expander.Header>
+              <TextBlock Text="{x:Bind ViewModel.UserLog.NumUnresolvedErrors}" />
+            </Expander.Header>
+            <Expander.Content>
+              <TextBlock Text="{x:Bind ViewModel.UserLog.UnresolvedErrors}" />
+            </Expander.Content>
+          </Expander>
+
         </Grid>
-      </ScrollViewer>
-    </Grid>
-    
+      </Expander.Content>
+    </Expander>
+
     <Grid Grid.Row="1" Margin="5">
       <Grid.RowDefinitions>
         <RowDefinition Height="Auto" />
