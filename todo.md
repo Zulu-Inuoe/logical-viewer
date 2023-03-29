@@ -1,25 +1,27 @@
-MVP
-
 - [x] Open .log file
     - [x] Parser
-    - [ ] View
-- [ ] Open .zip file
-    - [ ] Decompress & parse
-    - [ ] View
+    - [x] View
+- [x] Open .zip file
+    - [x] Decompress & parse
+    - [x] View
 - [ ] Drag and drop file to open
-- [ ] Overview of sync status
-    - [ ] Accounts
+- [ ] Loading Indicator
+- [x] MVP Overview of sync status
+    - [x] Accounts
         - [x] Parser
         - [x] View
-    - [ ] Calendars
+    - [x] Calendars
         - [x] Parser
         - [x] View
-    - [ ] Sync queues
+    - [x] Sync queues
         - [x] Parser
         - [x] View
-            - [ ] Pretty print last sync
-    - [ ] Calendar Set
-        - [x] Parser
-        - [ ] View
-
+            - [x] Pretty print last sync
+- [ ] Unresolved Errors
+- [ ] Calendar Set
+    - [x] Parser
+    - [ ] View
+- [ ] Verbose Accounts
+- [ ] Verbose Calendars
+- [ ] Accounts Plists
 
