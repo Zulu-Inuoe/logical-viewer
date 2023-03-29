@@ -5,6 +5,7 @@
   xmlns:local="using:LogicalViewer.View"
   xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
   xmlns:dataModel="using:LogicalParse.DataModel"
+  xmlns:viewModel="using:LogicalViewer.ViewModel"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   mc:Ignorable="d"
@@ -50,9 +51,23 @@
       </Grid.RowDefinitions>
       <TextBlock Grid.Row="0">Sync Queues:</TextBlock>
       <controls:DataGrid Grid.Row="1"
-          ItemsSource="{x:Bind ViewModel.UserLog.UserSyncQueues}"
-          AutoGenerateColumns="True"
+          ItemsSource="{x:Bind ViewModel.UserSyncQueues}"
+          AutoGenerateColumns="False"
           IsReadOnly="True">
+        <controls:DataGrid.Columns>
+          <controls:DataGridTextColumn Header="SourceKind" Binding="{Binding SourceKind}" />
+          <controls:DataGridTextColumn Header="SourceID" Binding="{Binding SourceID}" />
+          <controls:DataGridTextColumn Header="SourceUser" Binding="{Binding SourceUser}" />
+          <controls:DataGridTemplateColumn Header="LastSync">
+            <controls:DataGridTemplateColumn.CellTemplate>
+              <DataTemplate x:DataType="viewModel:UserSyncQueueVM">
+                <TextBlock Margin="10" Text="{x:Bind LastSyncAgo}" ToolTipService.ToolTip="{x:Bind LastSync}" />
+              </DataTemplate>
+            </controls:DataGridTemplateColumn.CellTemplate>
+          </controls:DataGridTemplateColumn>
+          <controls:DataGridTextColumn Header="QueueKind" Binding="{Binding QueueKind}" />
+          <controls:DataGridCheckBoxColumn Header="Active" Binding="{Binding Active}" />
+        </controls:DataGrid.Columns>
       </controls:DataGrid>
     </Grid>
   </Grid>
