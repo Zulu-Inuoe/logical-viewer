@@ -9,7 +9,6 @@
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   mc:Ignorable="d">
-
   <Grid>
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto" />
@@ -26,7 +25,8 @@
       </MenuBarItem>
     </MenuBar>
 
-    <TabView x:Name="LogsTabView" Grid.Row="1" TabCloseRequested="TabView_TabCloseRequested" IsAddTabButtonVisible="False">
+    <TabView x:Name="LogsTabView" Grid.Row="1" TabCloseRequested="TabView_TabCloseRequested" IsAddTabButtonVisible="False"
+             AllowDrop="True" DragOver="LogsTabView_DragOver" Drop="LogsTabView_Drop" VerticalAlignment="Stretch">
       <TabView.KeyboardAccelerators>
         <KeyboardAccelerator Key="W" Modifiers="Control" Invoked="CloseSelectedTabKeyboardAccelerator_Invoked" />
         <KeyboardAccelerator Key="Number1" Modifiers="Control" Invoked="NavigateToNumberedTabKeyboardAccelerator_Invoked" />

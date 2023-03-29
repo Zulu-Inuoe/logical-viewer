@@ -4,7 +4,8 @@
 - [x] Open .zip file
     - [x] Decompress & parse
     - [x] View
-- [ ] Drag and drop file to open
+- [x] Drag and drop file to open
+- [ ] Restrict drop indicator to .log and .zip
 - [ ] Loading Indicator
 - [x] MVP Overview of sync status
     - [x] Accounts

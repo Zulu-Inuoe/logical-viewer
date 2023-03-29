@@ -8,9 +8,9 @@ using System;
 using System.IO;
 using System.IO.Compression;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.DataTransfer;
 using Windows.Storage;
 using Windows.Storage.Pickers;
-using Windows.System;
 
 namespace LogicalViewer
 {
@@ -69,38 +69,43 @@ namespace LogicalViewer
             if (files is null)
                 return;
 
-            foreach (var file in files)
+            foreach (var storageFile in files)
             {
-                switch (file.FileType.ToLowerInvariant())
-                {
-                    case ".log":
-                        {
-                            using (var stream = await file.OpenStreamForReadAsync())
-                            {
-                                var vm = await OpenUserLog(file.Name, stream);
-                                AddUserLogTab(vm);
-                            }
-                        }
-                        break;
-                    case ".zip":
-                        {
-                            using (var archive = ZipFile.OpenRead(file.Path))
-                            {
-                                foreach (var entry in archive.Entries)
-                                {
-                                    if (Path.GetExtension(entry.FullName).ToLowerInvariant() != ".log")
-                                        continue;
+                await LoadStorageFile(storageFile);
+            }
+        }
 
-                                    using (var stream = entry.Open())
-                                    {
-                                        var vm = await OpenUserLog(entry.Name, stream);
-                                        AddUserLogTab(vm);
-                                    }
+        private async Task LoadStorageFile(StorageFile storageFile)
+        {
+            switch (storageFile.FileType.ToLowerInvariant())
+            {
+                case ".log":
+                    {
+                        using (var stream = await storageFile.OpenStreamForReadAsync())
+                        {
+                            var vm = await OpenUserLog(storageFile.Name, stream);
+                            AddUserLogTab(vm);
+                        }
+                    }
+                    break;
+                case ".zip":
+                    {
+                        using (var archive = ZipFile.OpenRead(storageFile.Path))
+                        {
+                            foreach (var entry in archive.Entries)
+                            {
+                                if (Path.GetExtension(entry.FullName).ToLowerInvariant() != ".log")
+                                    continue;
+
+                                using (var stream = entry.Open())
+                                {
+                                    var vm = await OpenUserLog(entry.Name, stream);
+                                    AddUserLogTab(vm);
                                 }
                             }
                         }
-                        break;
-                }
+                    }
+                    break;
             }
 
             void AddUserLogTab(UserLogVM vm)
@@ -161,6 +166,27 @@ namespace LogicalViewer
             }
 
             args.Handled = true;
+        }
+
+        private async void LogsTabView_Drop(object sender, DragEventArgs e)
+        {
+            if (!e.DataView.Contains(StandardDataFormats.StorageItems))
+                return;
+
+            var items = await e.DataView.GetStorageItemsAsync();
+            foreach (var item in items)
+            {
+                var storageFile = (StorageFile)item;
+                await LoadStorageFile(storageFile);
+            }
+        }
+
+        private void LogsTabView_DragOver(object sender, DragEventArgs e)
+        {
+            if (e.DataView.Contains(StandardDataFormats.StorageItems))
+            {
+                e.AcceptedOperation = e.AllowedOperations & DataPackageOperation.Copy;
+            }
         }
     }
 }
