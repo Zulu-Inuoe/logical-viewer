@@ -10,13 +10,13 @@ MVP
 - [ ] Overview of sync status
     - [ ] Accounts
         - [x] Parser
-        - [ ] View
+        - [x] View
     - [ ] Calendars
         - [x] Parser
-        - [ ] View
+        - [x] View
     - [ ] Sync queues
         - [x] Parser
-        - [ ] View
+        - [x] View
             - [ ] Pretty print last sync
     - [ ] Calendar Set
         - [x] Parser

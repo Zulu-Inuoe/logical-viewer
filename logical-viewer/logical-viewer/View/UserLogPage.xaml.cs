@@ -11,10 +11,5 @@ namespace LogicalViewer.View
         {
             this.InitializeComponent();
         }
-
-        private void ListView_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            DetailFrame.Content = e.ClickedItem;
-        }
     }
 }
