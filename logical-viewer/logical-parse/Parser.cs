@@ -195,11 +195,10 @@ namespace LogicalParse
 
                             // TODO - we can get richer reporting if we parse the plist, but this is something, at least
                             var buffer = sb.ToString();
-                            if (numErrors > 0)
-                            {
-                                ret.UnresolvedErrors = buffer;
-                            }
 
+                            ret.NumUnresolvedErrors = numErrors;
+                            ret.UnresolvedErrors = buffer;
+                            
                             line = reader.ReadLine();
                             parseState = ParseState.None;
                             continue;
