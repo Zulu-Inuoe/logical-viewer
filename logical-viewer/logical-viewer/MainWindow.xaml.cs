@@ -6,7 +6,11 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using System;
 using System.IO;
+using System.IO.Compression;
+using System.Threading.Tasks;
+using Windows.Storage;
 using Windows.Storage.Pickers;
+using Windows.System;
 
 namespace LogicalViewer
 {
@@ -18,6 +22,30 @@ namespace LogicalViewer
         public MainWindow()
         {
             this.InitializeComponent();
+        }
+
+        private async Task<UserLogVM?> OpenUserLog(string name, Stream stream)
+        {
+            // todo parse
+            var userLog = default(UserLog);
+            try
+            {
+                using (var reader = new StreamReader(stream))
+                {
+                    userLog = new LogicalParse.Parser().Parse(reader);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine(ex.Message);
+                return null;
+            }
+
+            return new UserLogVM()
+            {
+                Name = name,
+                UserLog = userLog
+            };
         }
 
         private async void MenuBarOpen_Click(object sender, RoutedEventArgs e)
@@ -37,39 +65,51 @@ namespace LogicalViewer
             openPicker.FileTypeFilter.Add(".zip");
 
             // Open the picker for the user to pick a file
-            var file = await openPicker.PickSingleFileAsync();
-            if (file != null)
-            {
-                // todo parse
-                var userLog = default(UserLog);
-                try
-                {
-                    using (var stream = await file.OpenReadAsync())
-                    using (var reader = new StreamReader(stream.AsStreamForRead()))
-                    {
-                        userLog = new LogicalParse.Parser().Parse(reader);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.Error.WriteLine(ex.Message);
-                    return;
-                }
-                
-                var vm = new UserLogVM()
-                {
-                    Name = file.Name,
-                    UserLog = userLog
-                };
+            var files = await openPicker.PickMultipleFilesAsync();
+            if (files is null)
+                return;
 
+            foreach (var file in files)
+            {
+                switch (file.FileType.ToLowerInvariant())
+                {
+                    case ".log":
+                        {
+                            using (var stream = await file.OpenStreamForReadAsync())
+                            {
+                                var vm = await OpenUserLog(file.Name, stream);
+                                AddUserLogTab(vm);
+                            }
+                        }
+                        break;
+                    case ".zip":
+                        {
+                            using(var archive = ZipFile.OpenRead(file.Path))
+                            {
+                                foreach(var entry in archive.Entries)
+                                {
+                                    if (Path.GetExtension(entry.FullName).ToLowerInvariant() != ".log")
+                                        continue;
+
+                                    using (var stream = entry.Open())
+                                    {
+                                        var vm = await OpenUserLog(entry.Name, stream);
+                                        AddUserLogTab(vm);
+                                    }
+                                }
+                            }
+                        }
+                        break;
+                }
+            }
+
+            void AddUserLogTab(UserLogVM vm)
+            {
                 var newItem = new TabViewItem
                 {
-                    Header = file.DisplayName,
+                    Header = vm.Name,
                     IconSource = new SymbolIconSource() { Symbol = Symbol.Document },
-                    Content = new Frame()
-                    {
-                        Content = new UserLogPage() { ViewModel = vm }
-                    }
+                    Content = new UserLogPage() { ViewModel = vm }
                 };
 
                 LogsTabView.TabItems.Add(newItem);
