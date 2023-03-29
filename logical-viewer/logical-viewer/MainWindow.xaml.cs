@@ -84,9 +84,9 @@ namespace LogicalViewer
                         break;
                     case ".zip":
                         {
-                            using(var archive = ZipFile.OpenRead(file.Path))
+                            using (var archive = ZipFile.OpenRead(file.Path))
                             {
-                                foreach(var entry in archive.Entries)
+                                foreach (var entry in archive.Entries)
                                 {
                                     if (Path.GetExtension(entry.FullName).ToLowerInvariant() != ".log")
                                         continue;
@@ -112,11 +112,9 @@ namespace LogicalViewer
                     Content = new UserLogPage() { ViewModel = vm }
                 };
 
-                LogsTabView.TabItems.Add(newItem);
-                if (LogsTabView.TabItems.Count == 1)
-                {
-                    LogsTabView.SelectedIndex = 0;
-                }
+
+                LogsTabView.TabItems.Insert(LogsTabView.SelectedIndex + 1, newItem);
+                ++LogsTabView.SelectedIndex;
             }
         }
 
