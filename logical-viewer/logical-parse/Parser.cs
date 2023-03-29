@@ -57,6 +57,10 @@ namespace LogicalParse
                 {
                     parseState = ParseState.SyncQueues;
                 }
+                else if (sc_UnresolvedErrorsRegex.IsMatch(line))
+                {
+                    parseState = ParseState.UnresolvedErrors;
+                }
 
                 if (line is null)
                 {
@@ -171,6 +175,35 @@ namespace LogicalParse
                             line = reader.ReadLine();
                             continue;
                         }
+                    case ParseState.UnresolvedErrors:
+                        {
+                            var numErrors = int.Parse(sc_UnresolvedErrorsRegex.Match(line).Groups[1].Value);
+                            line = reader.ReadLine();
+                            if (line != "(")
+                                break;
+
+                            var sb = new StringBuilder(line);
+                            while ((line = reader.ReadLine()) != null)
+                            {
+                                sb.AppendLine(line);
+                                if (line == ")")
+                                    break;
+                            }
+
+                            if (line is null)
+                                break;
+
+                            // TODO - we can get richer reporting if we parse the plist, but this is something, at least
+                            var buffer = sb.ToString();
+                            if (numErrors > 0)
+                            {
+                                ret.UnresolvedErrors = buffer;
+                            }
+
+                            line = reader.ReadLine();
+                            parseState = ParseState.None;
+                            continue;
+                        }
                     case ParseState.None:
                     default:
                         {
@@ -192,7 +225,8 @@ namespace LogicalParse
             Accounts,
             Calendars,
             CalendarSet,
-            SyncQueues
+            SyncQueues,
+            UnresolvedErrors
         }
 
         private static readonly Regex sc_CalendarRegex = new Regex(@"^.* \t(.+), (.+), (.+), (0|1)\/(0|1) \(count: (\d+)\)\s*$");
@@ -200,5 +234,6 @@ namespace LogicalParse
         private static readonly Regex sc_CalendarSetRegex = new Regex(@"^.* \t(.+), (.+)\s*$");
         private static readonly Regex sc_SyncQueueStartLineRegex = new Regex(@"(\S+) \/ (\S+) \((\S+), last sync: (.+), (?:.*)\): <(\S+): (?:\S+), active\? (0|1), ");
         private static readonly Regex sc_SyncQueueRegex = new Regex(@"(\S+) \/ (\S+) \((\S+), last sync: (.+), (?:.*)\): <(\S+): (?:\S+), active\? (0|1), ([\S\s]*)>");
+        private static readonly Regex sc_UnresolvedErrorsRegex = new Regex(@".+ Unresolved errors: \((\d+)\)");
     }
 }

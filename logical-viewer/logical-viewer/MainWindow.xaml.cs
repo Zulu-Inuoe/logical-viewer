@@ -84,7 +84,10 @@ namespace LogicalViewer
                         using (var stream = await storageFile.OpenStreamForReadAsync())
                         {
                             var vm = await OpenUserLog(storageFile.Name, stream);
-                            AddUserLogTab(vm);
+                            if (vm is not null)
+                            {
+                                AddUserLogTab(vm);
+                            }
                         }
                     }
                     break;
@@ -100,7 +103,10 @@ namespace LogicalViewer
                                 using (var stream = entry.Open())
                                 {
                                     var vm = await OpenUserLog(entry.Name, stream);
-                                    AddUserLogTab(vm);
+                                    if (vm is not null)
+                                    {
+                                        AddUserLogTab(vm);
+                                    }
                                 }
                             }
                         }
