@@ -5,8 +5,6 @@
     - [x] Decompress & parse
     - [x] View
 - [x] Drag and drop file to open
-- [ ] Restrict drop indicator to .log and .zip
-- [ ] Loading Indicator
 - [x] MVP Overview of sync status
     - [x] Accounts
         - [x] Parser
@@ -18,11 +16,13 @@
         - [x] Parser
         - [x] View
             - [x] Pretty print last sync
-- [ ] Unresolved Errors
-- [ ] Calendar Set
-    - [x] Parser
-    - [ ] View
+- [x] Unresolved Errors
 - [ ] Verbose Accounts
 - [ ] Verbose Calendars
 - [ ] Accounts Plists
+- [ ] Calendar Set
+    - [x] Parser
+    - [ ] View
+- [ ] Restrict drop indicator to .log and .zip
+- [ ] Loading Indicator
 
