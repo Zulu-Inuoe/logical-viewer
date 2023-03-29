@@ -153,7 +153,6 @@ namespace LogicalViewer
                     Windows.System.VirtualKey.Number6 => 5,
                     Windows.System.VirtualKey.Number7 => 6,
                     Windows.System.VirtualKey.Number8 => 7,
-                    Windows.System.VirtualKey.Number9 => 8,
                     Windows.System.VirtualKey.Number0 => InvokedTabView.TabItems.Count - 1,
                     _ => default(int?)
                 };

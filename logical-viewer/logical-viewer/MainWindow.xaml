@@ -28,7 +28,7 @@
 
     <TabView x:Name="LogsTabView" Grid.Row="1" TabCloseRequested="TabView_TabCloseRequested" IsAddTabButtonVisible="False">
       <TabView.KeyboardAccelerators>
-        <KeyboardAccelerator Key="F4" Modifiers="Control" Invoked="CloseSelectedTabKeyboardAccelerator_Invoked" />
+        <KeyboardAccelerator Key="W" Modifiers="Control" Invoked="CloseSelectedTabKeyboardAccelerator_Invoked" />
         <KeyboardAccelerator Key="Number1" Modifiers="Control" Invoked="NavigateToNumberedTabKeyboardAccelerator_Invoked" />
         <KeyboardAccelerator Key="Number2" Modifiers="Control" Invoked="NavigateToNumberedTabKeyboardAccelerator_Invoked" />
         <KeyboardAccelerator Key="Number3" Modifiers="Control" Invoked="NavigateToNumberedTabKeyboardAccelerator_Invoked" />
