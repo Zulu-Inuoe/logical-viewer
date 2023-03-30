@@ -17,7 +17,7 @@
         - [x] View
             - [x] Pretty print last sync
 - [x] Unresolved Errors
-- [ ] Verbose Accounts
+- [x] Verbose Accounts
 - [ ] Verbose Calendars
 - [ ] Accounts Plists
 - [ ] Calendar Set
