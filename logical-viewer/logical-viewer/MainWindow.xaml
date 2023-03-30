@@ -26,7 +26,8 @@
     </MenuBar>
 
     <TabView x:Name="LogsTabView" Grid.Row="1" TabCloseRequested="TabView_TabCloseRequested" IsAddTabButtonVisible="False"
-             AllowDrop="True" DragOver="LogsTabView_DragOver" Drop="LogsTabView_Drop" VerticalAlignment="Stretch">
+             AllowDrop="True" DragOver="LogsTabView_DragOver" Drop="LogsTabView_Drop" VerticalAlignment="Stretch"
+             Padding="0">
       <TabView.KeyboardAccelerators>
         <KeyboardAccelerator Key="W" Modifiers="Control" Invoked="CloseSelectedTabKeyboardAccelerator_Invoked" />
         <KeyboardAccelerator Key="Number1" Modifiers="Control" Invoked="NavigateToNumberedTabKeyboardAccelerator_Invoked" />
