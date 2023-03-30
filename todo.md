@@ -18,7 +18,7 @@
             - [x] Pretty print last sync
 - [x] Unresolved Errors
 - [x] Verbose Accounts
-- [ ] Verbose Calendars
+- [x] Verbose Calendars
 - [ ] Accounts Plists
 - [ ] Calendar Set
     - [x] Parser

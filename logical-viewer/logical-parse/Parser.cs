@@ -66,6 +66,11 @@ namespace LogicalParse
                     parseState = ParseState.VerboseSources;
                     line = reader.ReadLine();
                 }
+                else if (line.Contains(" Verbose calendars:"))
+                {
+                    parseState = ParseState.VerboseCalendars;
+                    line = reader.ReadLine();
+                }
 
                 if (line is null)
                 {
@@ -166,15 +171,71 @@ namespace LogicalParse
                             if (!match.Success)
                                 break;
 
-                            ret.UserCalendars.Add(new()
+                            var calendarId = match.Groups[3].Value;
+
+                            var calendar = ret.UserCalendars.Find(c => c.ID == calendarId);
+                            if (calendar is null)
                             {
-                                Name = match.Groups[1].Value,
-                                Source = match.Groups[2].Value,
-                                ID = match.Groups[3].Value,
-                                SyncRx = match.Groups[4].Value == "1",
-                                SyncTx = match.Groups[5].Value == "1",
-                                Count = int.Parse(match.Groups[6].Value)
-                            });
+                                calendar = new()
+                                {
+                                    ID = calendarId
+                                };
+                                ret.UserCalendars.Add(calendar);
+                            }
+
+                            calendar.Name = match.Groups[1].Value;
+                            calendar.Source = match.Groups[2].Value;
+                            calendar.SyncRx = match.Groups[4].Value == "1";
+                            calendar.SyncTx = match.Groups[5].Value == "1";
+                            calendar.Count = int.Parse(match.Groups[6].Value);
+
+                            line = reader.ReadLine();
+                            continue;
+                        }
+                    case ParseState.VerboseCalendars:
+                        {
+                            if (!line.TrimEnd().EndsWith("{"))
+                                break;
+
+                            var sb = new StringBuilder("{");
+                            sb.AppendLine();
+                            var identifier = default(string?);
+                            while ((line = reader.ReadLine()) != null)
+                            {
+                                sb.AppendLine(line);
+
+                                if (line.Trim() == "}")
+                                    break;
+                                var match = sc_VerboseSourceIdentifierRegex.Match(line);
+                                if (match.Success)
+                                    identifier = match.Groups[1].Value;
+                            }
+
+                            if (line is null)
+                                break;
+
+                            if (identifier is null)
+                                break;
+
+                            if (identifier.StartsWith('"'))
+                            {// Sometimes the identifier is wrapped in quotes
+                                // bad string
+                                if (!identifier.EndsWith('"'))
+                                    break;
+
+                                identifier = identifier.Substring(1, identifier.Length - 2);
+                            }
+
+                            var calendar = ret.UserCalendars.Find(ua => ua.ID == identifier);
+                            if (calendar is null)
+                            {
+                                calendar = new()
+                                {
+                                    ID = identifier
+                                };
+                            }
+
+                            calendar.Details = sb.ToString();
                             line = reader.ReadLine();
                             continue;
                         }
@@ -285,6 +346,7 @@ namespace LogicalParse
             CalendarSet,
             SyncQueues,
             VerboseSources,
+            VerboseCalendars,
             UnresolvedErrors
         }
 

@@ -11,9 +11,7 @@
         // TODO - clarify w/ Kent
         public bool SyncRx { get; set; }
         public bool SyncTx { get; set; }
-
         public int Count { get; set; }
-
-        // TODO - Pull additional property list
+        public string Details { get; set; }
     }
 }
