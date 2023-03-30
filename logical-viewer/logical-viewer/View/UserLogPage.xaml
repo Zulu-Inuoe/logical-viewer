@@ -81,11 +81,41 @@
         </controls:DataGrid.RowDetailsTemplate>
         <controls:DataGrid.Columns>
           <controls:DataGridCheckBoxColumn Header="Enabled" Binding="{Binding Enabled}" />
-          <controls:DataGridTextColumn Header="Name" Binding="{Binding Name}" />
-          <controls:DataGridTextColumn Header="ID" Binding="{Binding ProviderID}" />
-          <controls:DataGridTextColumn Header="Type" Binding="{Binding SourceKind}" />
-          <controls:DataGridTextColumn Header="Provider" Binding="{Binding SourceProvider}" />
-          <controls:DataGridTextColumn Header="User" Binding="{Binding SourceUser}" />
+          <controls:DataGridTemplateColumn Header="Name">
+            <controls:DataGridTemplateColumn.CellTemplate>
+              <DataTemplate x:DataType="dataModel:UserAccount">
+                <TextBlock Text="{x:Bind Name}" Margin="10" Loaded="CopyableTextBlock_Loaded" />
+              </DataTemplate>
+            </controls:DataGridTemplateColumn.CellTemplate>
+          </controls:DataGridTemplateColumn>
+          <controls:DataGridTemplateColumn Header="ID">
+            <controls:DataGridTemplateColumn.CellTemplate>
+              <DataTemplate x:DataType="dataModel:UserAccount">
+                <TextBlock Text="{x:Bind ProviderID}" Margin="10" Loaded="CopyableTextBlock_Loaded" />
+              </DataTemplate>
+            </controls:DataGridTemplateColumn.CellTemplate>
+          </controls:DataGridTemplateColumn>
+          <controls:DataGridTemplateColumn Header="Type">
+            <controls:DataGridTemplateColumn.CellTemplate>
+              <DataTemplate x:DataType="dataModel:UserAccount">
+                <TextBlock Text="{x:Bind SourceKind}" Margin="10" Loaded="CopyableTextBlock_Loaded" />
+              </DataTemplate>
+            </controls:DataGridTemplateColumn.CellTemplate>
+          </controls:DataGridTemplateColumn>
+          <controls:DataGridTemplateColumn Header="Provider">
+            <controls:DataGridTemplateColumn.CellTemplate>
+              <DataTemplate x:DataType="dataModel:UserAccount">
+                <TextBlock Text="{x:Bind SourceProvider}" Margin="10" Loaded="CopyableTextBlock_Loaded" />
+              </DataTemplate>
+            </controls:DataGridTemplateColumn.CellTemplate>
+          </controls:DataGridTemplateColumn>
+          <controls:DataGridTemplateColumn Header="User">
+            <controls:DataGridTemplateColumn.CellTemplate>
+              <DataTemplate x:DataType="dataModel:UserAccount">
+                <TextBlock Text="{x:Bind SourceUser}" Margin="10" Loaded="CopyableTextBlock_Loaded" />
+              </DataTemplate>
+            </controls:DataGridTemplateColumn.CellTemplate>
+          </controls:DataGridTemplateColumn>
         </controls:DataGrid.Columns>
       </controls:DataGrid>
     </Grid>
@@ -107,12 +137,36 @@
           </DataTemplate>
         </controls:DataGrid.RowDetailsTemplate>
         <controls:DataGrid.Columns>
-          <controls:DataGridTextColumn Header="Name" Binding="{Binding Name}" />
-          <controls:DataGridTextColumn Header="ID" Binding="{Binding ID}" />
-          <controls:DataGridTextColumn Header="SourceID" Binding="{Binding Source}" />
+          <controls:DataGridTemplateColumn Header="Name">
+            <controls:DataGridTemplateColumn.CellTemplate>
+              <DataTemplate x:DataType="dataModel:UserCalendar">
+                <TextBlock Text="{x:Bind Name}" Margin="10" Loaded="CopyableTextBlock_Loaded" />
+              </DataTemplate>
+            </controls:DataGridTemplateColumn.CellTemplate>
+          </controls:DataGridTemplateColumn>
+          <controls:DataGridTemplateColumn Header="ID">
+            <controls:DataGridTemplateColumn.CellTemplate>
+              <DataTemplate x:DataType="dataModel:UserCalendar">
+                <TextBlock Text="{x:Bind ID}" Margin="10" Loaded="CopyableTextBlock_Loaded" />
+              </DataTemplate>
+            </controls:DataGridTemplateColumn.CellTemplate>
+          </controls:DataGridTemplateColumn>
+          <controls:DataGridTemplateColumn Header="SourceID">
+            <controls:DataGridTemplateColumn.CellTemplate>
+              <DataTemplate x:DataType="dataModel:UserCalendar">
+                <TextBlock Text="{x:Bind Source}" Margin="10" Loaded="CopyableTextBlock_Loaded" />
+              </DataTemplate>
+            </controls:DataGridTemplateColumn.CellTemplate>
+          </controls:DataGridTemplateColumn>
           <controls:DataGridCheckBoxColumn Header="Sync In" Binding="{Binding SyncRx}" />
           <controls:DataGridCheckBoxColumn Header="Sync Out" Binding="{Binding SyncTx}" />
-          <controls:DataGridTextColumn Header="Count" Binding="{Binding Count}" />
+          <controls:DataGridTemplateColumn Header="Count">
+            <controls:DataGridTemplateColumn.CellTemplate>
+              <DataTemplate x:DataType="dataModel:UserCalendar">
+                <TextBlock Text="{x:Bind Count}" Margin="10" Loaded="CopyableTextBlock_Loaded" />
+              </DataTemplate>
+            </controls:DataGridTemplateColumn.CellTemplate>
+          </controls:DataGridTemplateColumn>
         </controls:DataGrid.Columns>
       </controls:DataGrid>
     </Grid>
@@ -129,7 +183,13 @@
           IsReadOnly="True">
         <controls:DataGrid.Columns>
           <controls:DataGridCheckBoxColumn Header="Active" Binding="{Binding Active}" />
-          <controls:DataGridTextColumn Header="SourceID" Binding="{Binding SourceKind}" />
+          <controls:DataGridTemplateColumn Header="SourceID">
+            <controls:DataGridTemplateColumn.CellTemplate>
+              <DataTemplate x:DataType="viewModel:UserSyncQueueVM">
+                <TextBlock Text="{x:Bind SourceKind}" Margin="10" Loaded="CopyableTextBlock_Loaded" />
+              </DataTemplate>
+            </controls:DataGridTemplateColumn.CellTemplate>
+          </controls:DataGridTemplateColumn>
           <controls:DataGridTemplateColumn Header="LastSync">
             <controls:DataGridTemplateColumn.CellTemplate>
               <DataTemplate x:DataType="viewModel:UserSyncQueueVM">
@@ -137,10 +197,27 @@
               </DataTemplate>
             </controls:DataGridTemplateColumn.CellTemplate>
           </controls:DataGridTemplateColumn>
-          <controls:DataGridTextColumn Header="SourceUser" Binding="{Binding SourceUser}" />
-          <controls:DataGridTextColumn Header="Handler" Binding="{Binding SourceID}" />
-          <controls:DataGridTextColumn Header="QueueKind" Binding="{Binding QueueKind}" />
-
+          <controls:DataGridTemplateColumn Header="SourceUser">
+            <controls:DataGridTemplateColumn.CellTemplate>
+              <DataTemplate x:DataType="viewModel:UserSyncQueueVM">
+                <TextBlock Text="{x:Bind SourceUser}" Margin="10" Loaded="CopyableTextBlock_Loaded" />
+              </DataTemplate>
+            </controls:DataGridTemplateColumn.CellTemplate>
+          </controls:DataGridTemplateColumn>
+          <controls:DataGridTemplateColumn Header="Handler">
+            <controls:DataGridTemplateColumn.CellTemplate>
+              <DataTemplate x:DataType="viewModel:UserSyncQueueVM">
+                <TextBlock Text="{x:Bind SourceID}" Margin="10" Loaded="CopyableTextBlock_Loaded" />
+              </DataTemplate>
+            </controls:DataGridTemplateColumn.CellTemplate>
+          </controls:DataGridTemplateColumn>
+          <controls:DataGridTemplateColumn Header="QueueKind">
+            <controls:DataGridTemplateColumn.CellTemplate>
+              <DataTemplate x:DataType="viewModel:UserSyncQueueVM">
+                <TextBlock Text="{x:Bind QueueKind}" Margin="10" Loaded="CopyableTextBlock_Loaded" />
+              </DataTemplate>
+            </controls:DataGridTemplateColumn.CellTemplate>
+          </controls:DataGridTemplateColumn>
         </controls:DataGrid.Columns>
       </controls:DataGrid>
     </Grid>
