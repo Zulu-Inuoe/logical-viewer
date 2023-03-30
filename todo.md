@@ -19,7 +19,7 @@
 - [x] Unresolved Errors
 - [x] Verbose Accounts
 - [x] Verbose Calendars
-- [ ] Accounts Plists
+- [x] ~~Accounts Plists~~ Information is redundant w/ verbose accounts
 - [ ] Calendar Set
     - [x] Parser
     - [ ] View
